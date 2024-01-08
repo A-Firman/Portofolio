@@ -61,7 +61,7 @@ body {
 .navbar-brand > h2 {
   color: rgb(65, 71, 70);
   font-weight: bold;
-  font-size: 40px;
+  font-size: 30px;
   padding-top: 12px;
 }
 .header-and-banner-con {
@@ -860,7 +860,7 @@ body {
 }
 .contact-form input,
 .contact-form textarea {
-  background: #211e39;
+  background: #0f0f13;
   border: none;
   font-size: 16px;
   color: var(--text-color);
@@ -879,7 +879,7 @@ body {
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: 1px solid #6f34fe;
-  box-shadow: 0 0 85px 0 #211e39;
+  box-shadow: 0 0 85px 0 #1d02e9;
 }
 .contact-form textarea {
   height: 148px;
