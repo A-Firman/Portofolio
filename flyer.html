@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eid Mubarak Flyer Generator</title>
+    <title>Eid Mubarak Flyer 2026 by Kak Noer</title>
     <link rel="icon" type="image/png" href="assets/image/f.png" />
     <meta name="description"
         content="Buat flyer Eid Mubarak kustom dengan nama kamu. Generate dan download sebagai gambar PNG." />
@@ -428,7 +428,7 @@
             </div>
             <h1 class="gradient-text tw-text-3xl sm:tw-text-4xl lg:tw-text-5xl tw-font-extrabold tw-mb-3"
                 style="line-height:1.2;">
-                Eid Mubarak<br />Flyer Generator
+                Eid Mubarak Flyer
             </h1>
             <p class="tw-text-sm sm:tw-text-base" style="color:#94a3b8;">
                 Masukkan nama kamu dan buat flyer Eid Mubarak Versi aku ✨
@@ -487,7 +487,7 @@
         <!-- Footer -->
         <div class="tw-text-center tw-mt-4 tw-mb-8" style="animation: fadeInUp 0.8s ease-out forwards;">
             <p class="tw-text-xs" style="color:#475569;">
-                Dibuat dengan <i class="fas fa-heart" style="color:#ef4444;"></i> oleh
+                Developed by
                 <a href="index.html" style="color:#34d399; text-decoration:none; font-weight:600;">A.Firman</a>
             </p>
         </div>
@@ -541,7 +541,7 @@
             const name = nameInput.value.trim();
 
             if (!name) {
-                showToast('⚠️ Silakan masukkan nama terlebih dahulu!', '#f59e0b');
+                showToast('⚠️ Astagfirullah, Ininya juga belum masukkan nama terlebih dahulu!', '#f59e0b');
                 nameInput.focus();
                 return;
             }
@@ -559,7 +559,7 @@
             btnDownload.disabled = false;
             isGenerated = true;
 
-            showToast('✅ Flyer berhasil di-generate!', '#10b981');
+            showToast('🙌 Alhamdulillah berhasil di-generate!', '#10b981');
         }
 
         // Download Flyer using html2canvas
@@ -570,28 +570,58 @@
             btnDownload.disabled = true;
             btnDownload.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Processing...';
 
-            html2canvas(flyerCanvas, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: null,
-                logging: false,
-            }).then(function (canvas) {
-                const link = document.createElement('a');
-                const safeName = name.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_') || 'eid_flyer';
-                link.download = `eid_mubarak_${safeName}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
-                link.click();
+            // --- Force fixed styles before capture so result is identical on all screens ---
+            const nameOverlay = document.querySelector('.flyer-name-overlay');
+            const nameText = document.querySelector('.flyer-name-text');
 
-                btnDownload.disabled = false;
-                btnDownload.innerHTML = '<i class="fas fa-download" style="margin-right:8px;"></i>Download';
-                showToast('📥 Flyer berhasil di-download!', '#10b981');
-            }).catch(function (err) {
-                console.error('Download error:', err);
-                btnDownload.disabled = false;
-                btnDownload.innerHTML = '<i class="fas fa-download" style="margin-right:8px;"></i>Download';
-                showToast('❌ Gagal download. Coba lagi.', '#ef4444');
-            });
+            // Save original inline styles (if any)
+            const origTextStyle = nameText.getAttribute('style') || '';
+            const origOverlayStyle = nameOverlay.getAttribute('style') || '';
+
+            // Apply fixed values for consistent download output
+            nameText.style.fontSize = '2.1rem';
+            nameText.style.letterSpacing = '2px';
+            nameText.style.lineHeight = '1.3';
+            nameOverlay.style.bottom = '3%';
+            nameOverlay.style.width = '80%';
+
+            // Force flyer canvas to fixed width for capture
+            const origCanvasMaxWidth = flyerCanvas.style.maxWidth;
+            const origCanvasWidth = flyerCanvas.style.width;
+            flyerCanvas.style.width = '600px';
+            flyerCanvas.style.maxWidth = '600px';
+
+            // Small delay to let browser apply styles before capture
+            setTimeout(function () {
+                html2canvas(flyerCanvas, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    logging: false,
+                }).then(function (canvas) {
+                    const link = document.createElement('a');
+                    const safeName = name.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_') || 'eid_flyer';
+                    link.download = `eid_mubarak_${safeName}.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0);
+                    link.click();
+
+                    btnDownload.disabled = false;
+                    btnDownload.innerHTML = '<i class="fas fa-download" style="margin-right:8px;"></i>Download';
+                    showToast('🙌Alhamdulillah berhasil di-download!', '#10b981');
+                }).catch(function (err) {
+                    console.error('Download error:', err);
+                    btnDownload.disabled = false;
+                    btnDownload.innerHTML = '<i class="fas fa-download" style="margin-right:8px;"></i>Download';
+                    showToast('❌ Yahh Gagal download. Coba lagi.', '#ef4444');
+                }).finally(function () {
+                    // --- Restore original responsive styles ---
+                    nameText.setAttribute('style', origTextStyle);
+                    nameOverlay.setAttribute('style', origOverlayStyle);
+                    flyerCanvas.style.width = origCanvasWidth || '';
+                    flyerCanvas.style.maxWidth = origCanvasMaxWidth || '';
+                });
+            }, 50);
         }
 
         // Toast notification
